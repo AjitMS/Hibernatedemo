@@ -13,17 +13,16 @@ public class UpdateStudent {
 		SessionFactory factory = new Configuration().configure().addAnnotatedClass(Student.class).buildSessionFactory();
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();
-		
-		//one way
-		/*Student student = session.get(Student.class, 4);
-		student.setEmail("HarveyisFired@byPearson111.com");
-		System.out.println("Student is: " + student);*/
+
+		// one way
+		/*
+		 * Student student = session.get(Student.class, 4);
+		 * student.setEmail("HarveyisFired@byPearson111.com");
+		 * System.out.println("Student is: " + student);
+		 */
 		session.getTransaction().commit();
-		
-		
-		//another way
-		
-		
+
+		// another way
 		session = factory.getCurrentSession();
 		session.beginTransaction();
 		session.createQuery("update Student set name='hahaha DonAjit is here'").executeUpdate();
