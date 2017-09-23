@@ -1,8 +1,26 @@
+
 package com.bridgeit.student.entity;
 
+import javax.persistence.Column;
+//import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Student")
 public class Student {
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String firstName, lastName;
+	@Column(name = "firstname")
+	private String firstName;
+	@Column(name = "lastname")
+	private String lastName;
+	@Column(name = "address")
 	private String address;
 
 	public int getId() {
@@ -42,6 +60,12 @@ public class Student {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
+	}
+
+	public Student() {
+		firstName = null;
+		lastName = null;
+		address = null;
 	}
 
 	@Override
