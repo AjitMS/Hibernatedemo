@@ -6,8 +6,11 @@ import java.util.Scanner;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
+import com.bridgeit.sessionFactoryPackage.SessionFactoryBuilder;
+import com.bridgeit.student.entity.Address;
+import com.bridgeit.student.entity.Book;
+import com.bridgeit.student.entity.Certification;
 import com.bridgeit.student.entity.Student;
 
 public class StudentManager {
@@ -65,8 +68,8 @@ public class StudentManager {
 		}
 	}
 
-	static SessionFactory factory = new Configuration().configure().addAnnotatedClass(Student.class)
-			.buildSessionFactory();
+	static SessionFactoryBuilder sessionFactoryBuilder = new SessionFactoryBuilder();
+	static SessionFactory factory = sessionFactoryBuilder.getSessionFactory();
 	static List<Student> studentList;
 
 	@SuppressWarnings("unchecked")
@@ -89,14 +92,61 @@ public class StudentManager {
 		System.out.println("Enter Student's Last Name");
 		student.setLastName(t.next());
 		System.out.println("Enter Student's Address");
-		student.setAddress(t.next());
+		try {
+			student.setAddress(getStudentAddress());
+		} catch (Throwable E) {
+			E.printStackTrace();
+		}
+
+		try {
+			student.setCertification(getStudentCertification());
+		} catch (Throwable E) {
+			E.printStackTrace();
+		}
+		Book book1 = getStudentBook();
+		student.getBookList().add(book1);
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();
 		session.save(student);
-		System.out.println("Student " + student.getFirstName() + " is added successfully into our records !");
 		session.getTransaction().commit();
 		session.close();
+		System.out.println("Student " + student.getFirstName() + " is added successfully into our records !");
 
+	}
+
+	private static Book getStudentBook() {
+		Book book = new Book();
+		System.out.println("Enter Book Name");
+		book.setBookName(t.nextLine());
+		System.out.println("Enter Book Author");
+		book.setBookAuthor(t.nextLine());
+		return book;
+	}
+
+	private static Address getStudentAddress() {
+		Address address = new Address();
+		System.out.println("Enter Street");
+		address.setStreet(t.nextLine());
+		System.out.println("Enter City");
+		address.setCity(t.nextLine());
+		System.out.println("Enter Landmark");
+		address.setLandMark(t.nextLine());
+		System.out.println("Enter State");
+		address.setState(t.nextLine());
+		System.out.println("Enter PinCode");
+		address.setPinCode(t.nextLine());
+		System.out.println("Enter Country");
+		address.setCountry(t.nextLine());
+		return address;
+	}
+
+	private static Certification getStudentCertification() {
+		Certification certification = new Certification();
+		System.out.println("Enter Certification Name");
+		certification.setName(t.next());
+		System.out.println("Enter Certification Date");
+		certification.setDate(t.next());
+		return certification;
 	}
 
 	private static void deleteStudent(Student student) {
@@ -107,9 +157,9 @@ public class StudentManager {
 		session.beginTransaction();
 		student = session.get(Student.class, id);
 		session.delete(student);
-		System.out.println("Student " + student.getFirstName() + " is deleted successfully from our records !");
 		session.getTransaction().commit();
 		session.close();
+		System.out.println("Student " + student.getFirstName() + " is deleted successfully from our records !");
 	}
 
 	private static void showStudent(Student student) {
@@ -119,9 +169,9 @@ public class StudentManager {
 		System.out.println("Enter ID to view");
 		int id = t.nextInt();
 		Student showStudent = session.get(Student.class, id);
-		System.out.print("Student details: \n" + showStudent);
 		session.getTransaction().commit();
 		session.close();
+		System.out.print("Student details: \n" + showStudent);
 	}
 
 	@SuppressWarnings("resource")
@@ -159,7 +209,7 @@ public class StudentManager {
 			System.out.println("Enter New Address: ");
 			// session.beginTransaction();
 			session = factory.getCurrentSession();
-			student.setAddress(t.nextLine());
+			student.setAddress(getStudentAddress());
 			session.getTransaction().commit();
 			session.close();
 			break;

@@ -1,0 +1,12 @@
+1.	@ElementCollection In order to have save list in Hibernate .
+	this tag creates another sub-table using super-table's primary key as its own foreign key in which and saves recored for
+	each user using same key(<key name> _ <table name>). (tutorial - 10, saving collections, koushik java brains)
+	
+2.  @AttributeOverride, @AttributeOverrides are to used to override same attribute with different column names.
+	it overrides address fields into home_adress and office_address.
+	
+3.	Hibernate brings PROXY objects from DB while retrieving with only tier 1 data types like int String only.
+	in order to GET heavy objects and list, it loads heavy types AFTER we request them for (by Applying Getter())
+	in order to save resources and heavy overload.
+	else we gotta use @ElementCollection(fetch=fetchtype.EAGER to get entire list and other data
+	

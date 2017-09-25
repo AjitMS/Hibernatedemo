@@ -1,9 +1,15 @@
 
 package com.bridgeit.student.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Column;
-//import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,8 +26,39 @@ public class Student {
 	private String firstName;
 	@Column(name = "lastname")
 	private String lastName;
-	@Column(name = "address")
-	private String address;
+	@Embedded
+	private Address address;
+	@Embedded
+	@Column(name = "certification")
+	private Certification certification;
+
+	@ElementCollection(fetch=FetchType.EAGER)//gets entire list and other data
+	//@ElementCollection(fetch=FetchType.Lazy)//gets only tier 1 Data like int String
+	private List<Book> bookList = new ArrayList<>();
+	
+	public Collection<Book> getBookList() {
+		return bookList;
+	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public Certification getCertification() {
+		return certification;
+	}
+
+	public void setCertification(Certification certification) {
+		this.certification = certification;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 
 	public int getId() {
 		return id;
@@ -47,19 +84,21 @@ public class Student {
 		this.lastName = lastName;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
+	public Student(String firstName, String lastName, Address address, Certification certification) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.address = address;
+		this.certification = certification;
 	}
 
-	public Student(String firstName, String lastName, String address) {
+	public Student(String firstName, String lastName, Address address, Certification certification,
+			List<Book> bookList) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
+		this.certification = certification;
+		this.bookList = bookList;
 	}
 
 	public Student() {
@@ -71,6 +110,6 @@ public class Student {
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
-				+ "]";
+				+ ", Certification=" + certification + "]";
 	}
 }
